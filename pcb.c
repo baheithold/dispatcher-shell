@@ -67,8 +67,9 @@ void setPCBpid(PCB *pcb, pid_t pid) {
     pcb->pid = pid;
 }
 
-void displayPCB(PCB *p, FILE *fp) {
-    fprintf(fp, "pid: %d arrival time: %d priority: %d processor time: %d\n", p->pid, p->arrivalTime, p->priority, p->processorTime);
+void displayPCB(PCB *pcb, FILE *fp) {
+    assert(pcb != 0);
+    fprintf(fp, "pid: %d arrival time: %d priority: %d processor time: %d\n", pcb->pid, pcb->arrivalTime, pcb->priority, pcb->processorTime);
 }
 
 void freePCB(PCB *pcb) {
