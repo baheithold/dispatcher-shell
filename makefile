@@ -6,10 +6,10 @@ all:	process dispatcher
 process: 	sigtrap.c
 	gcc -g sigtrap.c -o process -Wall
 
-dispatcher:	dispatcher.o scanner.o sll.o queue.o
-	gcc $(LOPTS) dispatcher.o scanner.o sll.o queue.o -o dispatcher
+dispatcher:	dispatcher.o pcb.o scanner.o sll.o queue.o
+	gcc $(LOPTS) dispatcher.o pcb.o scanner.o sll.o queue.o -o dispatcher
 
-dispatcher.o: 	dispatcher.c queue.h sll.h
+dispatcher.o: 	dispatcher.c pcb.h queue.h sll.h
 	gcc $(OOPTS) dispatcher.c
 
 scanner.o: 	scanner.c scanner.h
@@ -21,8 +21,11 @@ sll.o:	sll.c sll.h
 queue.o:	queue.c queue.h sll.h
 	gcc $(OOPTS) queue.c
 
+pcb.o: 	pcb.c pcb.h
+	gcc $(OOPTS) pcb.c
+
 test:	all
-	./dispatcher
+	./dispatcher ./sampleinput.txt
 
 valgrind:	all
 

@@ -66,7 +66,7 @@ struct SLL {
     void *(*removeFromFront)(SLL *);
     void *(*removeFromBack)(SLL *);
     void *(*removeFromIndex)(SLL *, int);
-}; 
+};
 
 
 /*
@@ -152,7 +152,7 @@ void *removeSLL(SLL *items, int index) {
  *  donor list to the recipient list. If the recipient list has the items
  *  {3,4,5} and the donor list has the items {1,2}, then, after the union,
  *  the donor list will be empty and recipient list will have the items
- *  {3,4,5,1,2}. The union method runs in constant time. 
+ *  {3,4,5,1,2}. The union method runs in constant time.
  */
 void unionSLL(SLL *recipient, SLL *donor) {
     // TODO: Do I work correctly? I THINK
@@ -212,8 +212,8 @@ void *getSLL(SLL *items, int index) {
  *  Usage: void *oldValue = setSLL(list, index, value);
  *  Description: This method updates the value at the given index. If the given
  *  index is a valid index for the list, the replaced value is returned. If the
- *  given index is equal to the size, the value is appended to the list and a 
- *  NULL pointer is returned. This method runs in constant time for updates at 
+ *  given index is equal to the size, the value is appended to the list and a
+ *  NULL pointer is returned. This method runs in constant time for updates at
  *  the very back of the list and at a constant distance from the front.
  *  A valid index for the list must be greater than or equal to zero and
  *  less than or equal to the size of the list.
@@ -258,7 +258,7 @@ int sizeSLL(SLL *items) {
 /*
  *  Method: displaySLL
  *  Usage: displaySLL(list, stdout);
- *  Description: This method prints the items stored in the list to the 
+ *  Description: This method prints the items stored in the list to the
  *  file pointer passed as an argument. There is no preceeding or following
  *  whitespace printed.
  *  Example: If the list holds the integers 5, 6, 2, 9, and 1 from front to back
