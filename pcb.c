@@ -24,6 +24,54 @@ PCB *newPCB(int arrival, int priority, int processor) {
     return p;
 }
 
+int getPCBarrivalTime(PCB *pcb) {
+    assert(pcb != 0);
+    return pcb->arrivalTime;
+}
+
+void setPCBarrivalTime(PCB *pcb, int time) {
+    assert(pcb != 0);
+    assert(time >= 0);
+    pcb->arrivalTime = time;
+}
+
+int getPCBpriority(PCB *pcb) {
+    assert(pcb != 0);
+    return pcb->priority;
+}
+
+void setPCBpriority(PCB *pcb, int priority) {
+    assert(pcb != 0);
+    assert(priority >= 0);
+    pcb->priority = priority;
+}
+
+int getPCBprocessorTime(PCB *pcb) {
+    assert(pcb != 0);
+    return pcb->processorTime;
+}
+
+void setPCBprocessorTime(PCB *pcb, int time) {
+    assert(pcb != 0);
+    assert(time >= 0);
+    pcb->processorTime = time;
+}
+
+pid_t getPCBpid(PCB *pcb) {
+    assert(pcb != 0);
+    return pcb->pid;
+}
+
+void setPCBpid(PCB *pcb, pid_t pid) {
+    assert(pcb != 0);
+    pcb->pid = pid;
+}
+
 void displayPCB(PCB *p, FILE *fp) {
     fprintf(fp, "pid: %d arrival time: %d priority: %d processor time: %d\n", p->pid, p->arrivalTime, p->priority, p->processorTime);
+}
+
+void freePCB(PCB *pcb) {
+    assert(pcb != 0);
+    free((PCB *) pcb);
 }

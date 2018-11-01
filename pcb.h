@@ -16,5 +16,6 @@ extern void setPCBprocessorTime(PCB *, int);
 extern pid_t getPCBpid(PCB *);
 extern void setPCBpid(PCB *, pid_t);
 extern void displayPCB(PCB *, FILE *);
+extern void freePCB(PCB *);
 
 #endif // !__PCB_INCLUDED__
