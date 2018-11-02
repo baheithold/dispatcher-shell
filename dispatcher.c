@@ -133,6 +133,7 @@ void startProcess(PCB *process) {
     else {
         setPCBpid(process, pid);
     }
+    setPCBstate(process, RUNNING);
 }
 
 void terminateProcess(PCB *process) {
@@ -146,8 +147,10 @@ void suspendProcess(PCB *process) {
     if (getPCBpriority(process) < 3) {
         setPCBpriority(process, getPCBpriority(process) + 1);
     }
+    setPCBstate(process, WAITING);
 }
 
 void restartProcess(PCB *process) {
     kill(getPCBpid(process), SIGCONT);
+    setPCBstate(process, RUNNING);
 }

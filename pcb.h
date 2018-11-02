@@ -8,7 +8,8 @@ typedef struct PCB PCB;
 
 typedef enum {
     READY,
-    WAITING
+    WAITING,
+    RUNNING
 } pcb_state;
 
 extern PCB *newPCB(int, int, int);
