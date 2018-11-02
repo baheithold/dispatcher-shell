@@ -1,3 +1,4 @@
+#define _POSIX_SOURCE
 #include "pcb.h"
 #include "queue.h"
 #include "scanner.h"
@@ -125,7 +126,9 @@ void getArrivedProcesses(int current_time, SLL *dispatcherList, QUEUE *system, Q
 void startProcess(PCB *process) {
     pid_t pid = fork();
     if (pid == 0) {
-        execvp("./process", NULL);
+        char *args[1];
+        args[0] = NULL;
+        execvp("./process", args);
     }
     else {
         setPCBpid(process, pid);

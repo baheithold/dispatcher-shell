@@ -9,6 +9,7 @@ struct PCB {
     int arrivalTime;
     int priority;
     int processorTime;
+    pcb_state state;
 };
 
 PCB *newPCB(int arrival, int priority, int processor) {
@@ -21,6 +22,7 @@ PCB *newPCB(int arrival, int priority, int processor) {
     p->arrivalTime = arrival;
     p->priority = priority;
     p->processorTime = processor;
+    p->state = WAITING;
     return p;
 }
 
@@ -65,6 +67,16 @@ pid_t getPCBpid(PCB *pcb) {
 void setPCBpid(PCB *pcb, pid_t pid) {
     assert(pcb != 0);
     pcb->pid = pid;
+}
+
+pcb_state getPCBstate(PCB *pcb) {
+    assert(pcb != 0);
+    return pcb->state;
+}
+
+void setPCBstate(PCB *pcb, pcb_state state) {
+    assert(pcb != 0);
+    pcb->state = state;
 }
 
 void displayPCB(void *pcb, FILE *fp) {
