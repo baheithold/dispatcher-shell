@@ -28,6 +28,8 @@ test:	all
 	./dispatcher ./sampleinput.txt
 
 valgrind:	all
+	clear
+	valgrind ./dispatcher ./sampleinput.txt
 
 clean:
 	rm -f *.o vgcore.* ./dispatcher ./process

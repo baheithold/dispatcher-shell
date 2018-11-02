@@ -51,10 +51,10 @@ int getPCBprocessorTime(PCB *pcb) {
     return pcb->processorTime;
 }
 
-void setPCBprocessorTime(PCB *pcb, int time) {
+void decrementPCBprocessorTime(PCB *pcb) {
     assert(pcb != 0);
-    assert(time >= 0);
-    pcb->processorTime = time;
+    assert(pcb->processorTime > 0);
+    pcb->processorTime--;
 }
 
 pid_t getPCBpid(PCB *pcb) {
