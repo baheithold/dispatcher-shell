@@ -3,8 +3,11 @@
 #include "scanner.h"
 #include "sll.h"
 #include <assert.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #define TIME_QUANTUM    1
 #define SYSTEM_PRIORITY 0
@@ -17,6 +20,10 @@
 SLL *createDispatcherList(char *);
 int processesRemain(SLL *);
 void getArrivedProcesses(int, SLL *, QUEUE *, QUEUE *, QUEUE *, QUEUE *);
+void startProcess(PCB *process);
+void terminateProcess(PCB *process);
+void suspendProcess(PCB *process);
+void restartProcess(PCB *process);
 
 
 int main(int argc, char **argv) {
@@ -36,9 +43,15 @@ int main(int argc, char **argv) {
     QUEUE *mediumQueue = newQUEUE(displayPCB, freePCB);
     QUEUE *lowQueue = newQUEUE(displayPCB, freePCB);
 
+    // Run Processes
     int current_time = 0;
-    getArrivedProcesses(current_time, dispatcherList, systemQueue, highQueue, mediumQueue, lowQueue);
+    int system_process_running = 0;
+    PCB *current_process_running = 0;
+    while (current_process_running || processesRemain(dispatcherList)) {
+        getArrivedProcesses(current_time, dispatcherList, systemQueue, highQueue, mediumQueue, lowQueue);
+    }
 
+    // Free memory and exit program
     freeSLL(dispatcherList);
     freeQUEUE(systemQueue);
     freeQUEUE(highQueue);
@@ -107,4 +120,31 @@ void getArrivedProcesses(int current_time, SLL *dispatcherList, QUEUE *system, Q
                 break;
         }
     }
+}
+
+void startProcess(PCB *process) {
+    pid_t pid = fork();
+    if (pid == 0) {
+        execvp("./process", NULL);
+    }
+    else {
+        setPCBpid(process, pid);
+    }
+}
+
+void terminateProcess(PCB *process) {
+    kill(getPCBpid(process), SIGINT);
+    waitpid(getPCBpid(process), NULL, WUNTRACED);
+}
+
+void suspendProcess(PCB *process) {
+    kill(getPCBpid(process), SIGTSTP);
+    waitpid(getPCBpid(process), NULL, WUNTRACED);
+    if (getPCBpriority(process) < 3) {
+        setPCBpriority(process, getPCBpriority(process) + 1);
+    }
+}
+
+void restartProcess(PCB *process) {
+    kill(getPCBpid(process), SIGCONT);
 }
