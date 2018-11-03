@@ -61,11 +61,13 @@ int main(int argc, char **argv) {
             freePCB(current_process_running);
             current_process_running = 0;
         }
+
         // Check if system process needs to be run
         if (!system_process_running && sizeQUEUE(systemQueue) > 0) {
             if (current_process_running) {
+                // Preempt current running user process
                 suspendProcess(current_process_running);
-                if (getPCBpriority(current_process_running) < 3) {
+                if (getPCBpriority(current_process_running) < LOW_PRIORITY) {
                     lowerPCBpriority(current_process_running);
                 }
                 enqueueBasedOnPriority(current_process_running, systemQueue, highQueue, mediumQueue, lowQueue);
@@ -76,14 +78,14 @@ int main(int argc, char **argv) {
             system_process_running = 1;
         }
         else if (system_process_running) {
-            // Do nothing
+            // System process running, let run to completion
         }
         // if there is no system processes running and there is a process waiting to be run
         else if (sizeQUEUE(highQueue) > 0) {
-            // high priority process waiting to be run
+            // high priority user process waiting to be run
             if (current_process_running) {
                 suspendProcess(current_process_running);
-                if (getPCBpriority(current_process_running) < 3) {
+                if (getPCBpriority(current_process_running) < LOW_PRIORITY) {
                     lowerPCBpriority(current_process_running);
                 }
                 enqueueBasedOnPriority(current_process_running, systemQueue, highQueue, mediumQueue, lowQueue);
@@ -101,10 +103,10 @@ int main(int argc, char **argv) {
             system_process_running = 0;
         }
         else if (sizeQUEUE(mediumQueue) > 0) {
-            // medium priority process waiting to be run
+            // medium priority user process waiting to be run
             if (current_process_running) {
                 suspendProcess(current_process_running);
-                if (getPCBpriority(current_process_running) < 3) {
+                if (getPCBpriority(current_process_running) < LOW_PRIORITY) {
                     lowerPCBpriority(current_process_running);
                 }
                 enqueueBasedOnPriority(current_process_running, systemQueue, highQueue, mediumQueue, lowQueue);
@@ -122,10 +124,10 @@ int main(int argc, char **argv) {
             system_process_running = 0;
         }
         else if (sizeQUEUE(lowQueue) > 0) {
-            // low priority process waiting to be run
+            // low priority user process waiting to be run
             if (current_process_running) {
                 suspendProcess(current_process_running);
-                if (getPCBpriority(current_process_running) < 3) {
+                if (getPCBpriority(current_process_running) < LOW_PRIORITY) {
                     lowerPCBpriority(current_process_running);
                 }
                 enqueueBasedOnPriority(current_process_running, systemQueue, highQueue, mediumQueue, lowQueue);
@@ -142,7 +144,9 @@ int main(int argc, char **argv) {
             current_process_running = lowProcess;
             system_process_running = 0;
         }
+
         if (current_process_running) {
+            // if process has time remaining, let run else terminate process
             if (getPCBprocessorTime(current_process_running) > 0) {
                 decrementPCBprocessorTime(current_process_running);
             }
@@ -259,7 +263,7 @@ void terminateProcess(PCB *process) {
 void suspendProcess(PCB *process) {
     kill(getPCBpid(process), SIGTSTP);
     waitpid(getPCBpid(process), NULL, WUNTRACED);
-    if (getPCBpriority(process) < 3) {
+    if (getPCBpriority(process) < LOW_PRIORITY) {
         setPCBpriority(process, getPCBpriority(process) + 1);
     }
     setPCBstate(process, WAITING);
